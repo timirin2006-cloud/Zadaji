@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Физика 9 класс: движение и свободное падение</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF3F1;--grid:#D6E2DE;--ink:#14222B;--mute:#4B5E67;--card:#FFFFFF;--line:#BFD0CB;--acc:#0E7C86;--ball:#F2B705;--ok:#1E8E5A;--bad:#C0392B;--okbg:#E3F4EB;--badbg:#FBE7E4}
+@media(prefers-color-scheme:dark){:root{--bg:#0F1A20;--grid:#1A2A32;--ink:#E6EEF0;--mute:#9DB1B8;--card:#16252D;--line:#2C424C;--acc:#4FC3CF;--ball:#F7C928;--ok:#53D08F;--bad:#FF8A7A;--okbg:#14352A;--badbg:#3C1F1B}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font:17px/1.6 Onest,system-ui,sans-serif;color:var(--ink);background-color:var(--bg);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px}
+.wrap{max-width:900px;margin:0 auto;padding:0 18px}
+h1,h2,h3{font-family:Unbounded,Onest,sans-serif;line-height:1.2;margin:0}
+.hero{display:grid;grid-template-columns:1.3fr 1fr;gap:24px;align-items:center;padding:48px 0 28px}
+.hero h1{font-size:clamp(28px,6vw,46px);font-weight:800}
+.hero p{color:var(--mute);max-width:46ch}
+.nav{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.nav a{padding:9px 16px;border:2px solid var(--ink);border-radius:999px;color:var(--ink);text-decoration:none;font-weight:500}
+.nav a:hover,.nav a:focus-visible{background:var(--ink);color:var(--bg);outline:none}
+.strobe{background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:8px}
+.strobe svg{width:100%;height:auto;display:block}
+.strobe text{fill:var(--ink);font:12px Onest,sans-serif}
+section{padding:30px 0}
+h2{font-size:clamp(22px,4vw,30px);margin-bottom:16px}
+h3{font-size:18px;margin:0 0 8px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.card{background:var(--card);border:2px solid var(--ink);border-radius:12px;padding:16px 18px}
+.card.k{border-left:10px solid var(--acc)}
+.f{font:500 18px/1.8 Onest,sans-serif;background:var(--bg);border-radius:8px;padding:6px 12px;margin:8px 0;display:block}
+.note{border-left:6px solid var(--ball);padding:8px 14px;background:var(--card);margin:16px 0;border-radius:0 8px 8px 0}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.tabs button{font:500 16px Onest,sans-serif;padding:8px 16px;border:2px solid var(--ink);border-radius:999px;background:var(--card);color:var(--ink);cursor:pointer}
+.tabs button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.score{font-weight:700;margin-left:auto;align-self:center}
+.task{background:var(--card);border:2px solid var(--ink);border-radius:12px;padding:16px 18px;margin-bottom:16px}
+.lvl{display:inline-block;font-size:14px;font-weight:700;padding:1px 10px;border-radius:999px;background:var(--ball);color:#14222B;margin-bottom:6px}
+.task p{margin:4px 0 12px}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.opts button{font:500 16px Onest,sans-serif;text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);cursor:pointer}
+.opts button:hover:not(:disabled){border-color:var(--acc)}
+.opts button:focus-visible,.tabs button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.opts button.right{background:var(--okbg);border-color:var(--ok)}
+.opts button.wrong{background:var(--badbg);border-color:var(--bad)}
+.sol{display:none;margin-top:12px;padding:12px 14px;border-radius:10px;background:var(--bg);border:2px dashed var(--line)}
+.sol.on{display:block}
+.sol b.v{color:var(--ok)}
+footer{padding:30px 0 50px;color:var(--mute);font-size:15px}
+@media(max-width:700px){.hero{grid-template-columns:1fr;padding-top:28px}}
+@media(prefers-reduced-motion:no-preference){.ball{animation:drop 1.4s cubic-bezier(.6,0,1,.6) infinite alternate}@keyframes drop{from{transform:translateY(-6px)}to{transform:translateY(0)}}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+<div>
+<h1>Как движутся тела</h1>
+<p>Повторяем для 9 класса: равномерное и равноускоренное движение по прямой, свободное падение. Коротко о главном, потом 14 задач с вариантами ответа и подробным разбором.</p>
+<nav class="nav"><a href="#teoriya">Теория</a><a href="#zadachi">Задачи</a></nav>
+</div>
+<div class="strobe" aria-label="Положения падающего шарика через каждую секунду">
+<svg viewBox="0 0 300 270" role="img">
+<line x1="40" y1="10" x2="40" y2="260" stroke="currentColor" stroke-width="2" style="color:var(--ink)"/>
+<g stroke="var(--mute)" stroke-width="1"><line x1="34" y1="14" x2="46" y2="14"/><line x1="34" y1="51" x2="46" y2="51"/><line x1="34" y1="109" x2="46" y2="109"/><line x1="34" y1="196" x2="46" y2="196"/><line x1="34" y1="312" x2="46" y2="312"/></g>
+<circle cx="90" cy="14" r="9" fill="var(--ball)" stroke="var(--ink)" stroke-width="2"/>
+<circle cx="130" cy="29" r="9" fill="var(--ball)" stroke="var(--ink)" stroke-width="2"/>
+<circle cx="170" cy="72" r="9" fill="var(--ball)" stroke="var(--ink)" stroke-width="2"/>
+<circle cx="210" cy="145" r="9" fill="var(--ball)" stroke="var(--ink)" stroke-width="2"/>
+<circle class="ball" cx="250" cy="246" r="9" fill="var(--ball)" stroke="var(--ink)" stroke-width="2"/>
+<text x="104" y="18">0 с</text><text x="144" y="33">1 с: 5 м</text><text x="184" y="76">2 с: 20 м</text><text x="224" y="149">3 с: 45 м</text><text x="150" y="250">4 с: 80 м</text><text x="60" y="130" style="font-weight:700">за каждую секунду</text><text x="60" y="146" style="font-weight:700">пути 5 : 15 : 25 : 35</text>
+</svg>
+</div>
+</header>
+
+<section id="teoriya">
+<h2>Теория</h2>
+<div class="cards">
+<div class="card k"><h3>Равномерное движение</h3>
+Скорость не меняется, ускорение a = 0.
+<span class="f">s = v · t</span><span class="f">x = x₀ + v · t</span>
+Встречное движение: скорости складываются. Вдогонку: вычитаются.</div>
+<div class="card k"><h3>Равноускоренное движение</h3>
+Скорость меняется на одно и то же число каждую секунду.
+<span class="f">a = (v − v₀) / t</span><span class="f">v = v₀ + a·t</span><span class="f">s = v₀·t + a·t²/2</span><span class="f">s = (v² − v₀²) / (2a)</span>
+Если тело тормозит, a берём со знаком «минус».</div>
+<div class="card k"><h3>Свободное падение</h3>
+Движение только под действием притяжения Земли. Все тела падают с одним ускорением g ≈ 9,8 м/с². В задачах обычно берут g = 10 м/с².
+<span class="f">v = g·t</span><span class="f">h = g·t²/2</span><span class="f">v² = 2·g·h</span>
+Вверх: <span class="f">v = v₀ − g·t</span><span class="f">H = v₀² / (2g)</span>
+Время подъёма равно времени падения обратно: t = v₀ / g.</div>
+</div>
+<div class="note"><b>Полезный факт.</b> Из покоя при равноускоренном движении пути за 1-ю, 2-ю, 3-ю секунды относятся как 1 : 3 : 5 : 7. Для падения: 5 м, 15 м, 25 м, 35 м (см. рисунок).</div>
+<div class="note"><b>Порядок решения.</b> 1) Переведи всё в СИ (м, с, м/с). 2) Выбери направление оси и знаки. 3) Запиши формулу. 4) Подставь числа. 5) Проверь, что ответ похож на правду.</div>
+</section>
+
+<section id="zadachi">
+<h2>Задачи</h2>
+<div class="tabs" id="tabs"></div>
+<div id="list"></div>
+</section>
+<footer>Задачи авторские. Для сверки теории смотри учебник физики для 9 класса (А. В. Перышкин). Принято g = 10 м/с².</footer>
+</div>
+
+<script>
+const T=[
+{l:"Лёгкая",q:"Велосипедист едет с постоянной скоростью 6 м/с. Какой путь он проедет за 2 минуты?",o:["12 м","360 м","720 м","7200 м"],a:2,s:"Переводим время в секунды: 2 мин = 120 с.<br>Движение равномерное: s = v·t = 6 · 120 = <b class='v'>720 м</b>.<br>Ошибка 12 м получается, если не перевести минуты в секунды."},
+{l:"Лёгкая",q:"Скорость поезда 72 км/ч. Выразите её в м/с.",o:["7,2 м/с","20 м/с","72 м/с","259 м/с"],a:1,s:"1 км/ч = 1000 м / 3600 с = 1/3,6 м/с.<br>72 : 3,6 = <b class='v'>20 м/с</b>.<br>Запомни: км/ч → м/с делим на 3,6, м/с → км/ч умножаем на 3,6."},
+{l:"Лёгкая",q:"Автомобиль разгоняется из покоя до 20 м/с за 5 с. Чему равно ускорение?",o:["0,25 м/с²","4 м/с²","15 м/с²","100 м/с²"],a:1,s:"Начальная скорость v₀ = 0.<br>a = (v − v₀)/t = (20 − 0)/5 = <b class='v'>4 м/с²</b>.<br>Это значит: каждую секунду скорость растёт на 4 м/с."},
+{l:"Лёгкая",q:"Камень падает без начальной скорости. Какова его скорость через 3 с? (g = 10 м/с²)",o:["3,3 м/с","13 м/с","30 м/с","90 м/с"],a:2,s:"Свободное падение из покоя: v = g·t = 10 · 3 = <b class='v'>30 м/с</b>.<br>Вариант 90 получается, если по ошибке возвести время в квадрат и умножить: g·t²."},
+{l:"Лёгкая",q:"Тело падает без начальной скорости 2 с. С какой высоты оно упало? (g = 10 м/с²)",o:["10 м","20 м","40 м","5 м"],a:1,s:"h = g·t²/2 = 10 · 2² / 2 = 10 · 4 / 2 = <b class='v'>20 м</b>.<br>Не забывай делить на 2: без деления получится 40 м."},
+{l:"Средняя",q:"Автомобиль тормозит с ускорением 5 м/с² (по модулю), начальная скорость 20 м/с. Каков тормозной путь?",o:["20 м","40 м","80 м","100 м"],a:1,s:"Конечная скорость v = 0, ускорение a = −5 м/с².<br>s = (v² − v₀²)/(2a) = (0 − 400)/(2 · (−5)) = (−400)/(−10) = <b class='v'>40 м</b>.<br>Проверка: время торможения t = 20/5 = 4 с, средняя скорость 10 м/с, путь 10 · 4 = 40 м."},
+{l:"Средняя",q:"Тело начинает двигаться из покоя с ускорением 2 м/с². Какой путь оно пройдёт за пятую секунду?",o:["9 м","10 м","11 м","25 м"],a:0,s:"Путь за пятую секунду = путь за 5 с минус путь за 4 с.<br>s₅ = 2 · 5²/2 = 25 м; s₄ = 2 · 4²/2 = 16 м.<br>25 − 16 = <b class='v'>9 м</b>.<br>25 м это путь за все пять секунд, а не за пятую."},
+{l:"Средняя",q:"Два пешехода идут навстречу друг другу по прямой: один со скоростью 1,5 м/с, другой 2,5 м/с. Расстояние между ними 200 м. Через какое время они встретятся?",o:["20 с","40 с","50 с","100 с"],a:2,s:"При встречном движении скорости складываются: v = 1,5 + 2,5 = 4 м/с (так быстро сокращается расстояние).<br>t = s/v = 200/4 = <b class='v'>50 с</b>."},
+{l:"Средняя",q:"Мяч брошен вертикально вверх со скоростью 20 м/с. На какую максимальную высоту он поднимется? (g = 10 м/с²)",o:["10 м","20 м","40 м","2 м"],a:1,s:"В верхней точке скорость равна 0, ускорение g направлено вниз.<br>H = v₀²/(2g) = 400 / 20 = <b class='v'>20 м</b>.<br>Время подъёма t = v₀/g = 2 с; 2 м это не высота, а как раз время."},
+{l:"Средняя",q:"Тело падает с высоты 80 м без начальной скорости. С какой скоростью оно ударится о землю? (g = 10 м/с²)",o:["20 м/с","40 м/с","80 м/с","160 м/с"],a:1,s:"Используем v² = 2·g·h = 2 · 10 · 80 = 1600.<br>v = √1600 = <b class='v'>40 м/с</b>.<br>Проверка: время падения t = √(2h/g) = √16 = 4 с, v = g·t = 40 м/с."},
+{l:"Сложная",q:"Автомобиль, имея скорость 10 м/с, разгоняется с ускорением 1 м/с² на пути 150 м. Какой скорости он достигнет?",o:["15 м/с","20 м/с","25 м/с","160 м/с"],a:1,s:"Время не дано, поэтому берём формулу без времени: v² = v₀² + 2·a·s.<br>v² = 100 + 2 · 1 · 150 = 400.<br>v = √400 = <b class='v'>20 м/с</b>.<br>Частая ошибка: забыть извлечь корень и ответить 400."},
+{l:"Сложная",q:"Тело свободно падает. За последнюю секунду падения оно пролетело 25 м. С какой высоты оно упало? (g = 10 м/с²)",o:["30 м","45 м","60 м","80 м"],a:1,s:"Пусть всё падение длилось t секунд. Путь за последнюю секунду = h(t) − h(t−1) = 5t² − 5(t−1)² = 5(2t − 1).<br>5(2t − 1) = 25 → 2t − 1 = 5 → t = 3 с.<br>h = g·t²/2 = 10 · 9 / 2 = <b class='v'>45 м</b>.<br>Проверка: за 2 с пролетело бы 20 м, 45 − 20 = 25 м. Верно."},
+{l:"Сложная",q:"Мимо стоящего мотоциклиста проезжает автомобиль со скоростью 20 м/с. В этот момент мотоциклист трогается с ускорением 2 м/с². Через какое время он догонит автомобиль?",o:["5 с","10 с","20 с","40 с"],a:2,s:"Когда догонит, координаты равны (начало отсчёта там, где они были рядом).<br>Автомобиль (равномерно): x₁ = 20·t. Мотоцикл (из покоя): x₂ = 2·t²/2 = t².<br>t² = 20·t → t = 20 с (корень t = 0 это момент старта).<br>К этому моменту они проехали по 20 · 20 = 400 м.<br>Ответ: <b class='v'>20 с</b>. На 10 с скорость мотоцикла ещё меньше скорости автомобиля, так что он ещё отстаёт."},
+{l:"Сложная",q:"Камень брошен вертикально вверх со скоростью 30 м/с. В какие моменты времени он будет на высоте 25 м? (g = 10 м/с²)",o:["Только через 1 с","Через 1 с и через 5 с","Через 2 с и через 4 с","Только через 3 с"],a:1,s:"Высота: h = v₀·t − g·t²/2 = 30t − 5t².<br>Приравниваем к 25: 30t − 5t² = 25 → t² − 6t + 5 = 0.<br>Корни: t₁ = 1 с, t₂ = 5 с (по теореме Виета: сумма 6, произведение 5).<br>Ответ: <b class='v'>1 с и 5 с</b>: первый раз камень проходит 25 м вверх, второй раз вниз.<br>Проверка: весь полёт длится 2·30/10 = 6 с, значит, момент 5 с возможен. Высшая точка (45 м) достигается на 3-й секунде, между 1 с и 5 с."}
+];
+const L=["Все","Лёгкая","Средняя","Сложная"];let cur="Все",done={};
+const tabs=document.getElementById("tabs"),list=document.getElementById("list");
+function score(){const n=Object.keys(done).length,r=Object.values(done).filter(Boolean).length;return "Верно: "+r+" из "+n}
+function draw(){
+tabs.innerHTML="";
+L.forEach(x=>{const b=document.createElement("button");b.textContent=x;b.setAttribute("aria-pressed",x===cur);b.onclick=()=>{cur=x;draw()};tabs.appendChild(b)});
+const sc=document.createElement("span");sc.className="score";sc.id="sc";sc.textContent=score();tabs.appendChild(sc);
+list.innerHTML="";
+T.forEach((t,i)=>{if(cur!=="Все"&&t.l!==cur)return;
+const d=document.createElement("article");d.className="task";
+d.innerHTML='<span class="lvl">'+t.l+' · №'+(i+1)+'</span><p>'+t.q+'</p><div class="opts"></div><div class="sol"><b>Решение.</b><br>'+t.s+'</div>';
+const ob=d.querySelector(".opts"),sol=d.querySelector(".sol");
+t.o.forEach((o,k)=>{const b=document.createElement("button");b.textContent="ABCD"[k]+") "+o;
+const ans=()=>{if(i in done)return;done[i]=(k===t.a);[...ob.children].forEach((c,m)=>{c.disabled=true;if(m===t.a)c.classList.add("right");else if(m===k)c.classList.add("wrong")});sol.classList.add("on");document.getElementById("sc").textContent=score()};
+b.onclick=ans;ob.appendChild(b)});
+if(i in done){[...ob.children].forEach((c,m)=>{c.disabled=true;if(m===t.a)c.classList.add("right")});sol.classList.add("on")}
+list.appendChild(d)});
+}
+draw();
+</script>
+</body>
+</html>
